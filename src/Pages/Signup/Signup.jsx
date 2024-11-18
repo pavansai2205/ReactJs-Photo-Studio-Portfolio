@@ -54,10 +54,9 @@
 // export default Signup;
 
 import React, { useState } from 'react';
-// import './Auth.css'; // Import the CSS file for styling
 
-function Signup() {
-    const [isSignup, setIsSignup] = useState(true); // State to toggle between Signup and Login
+function Signin() {
+    const [isSignup, setIsSignup] = useState(true);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
@@ -65,39 +64,43 @@ function Signup() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const url = isSignup ? 'http://localhost/php/signup.php' : 'http://localhost/php/login.php'; // URL based on form type
-        const body = isSignup ? { username, password, email } : { username, password }; // Body based on form type
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body)
-        });
-        const data = await response.json();
-        setMessage(data.message);
+        const url = isSignup ? 'http://localhost/project/signup.php' : 'http://localhost/project/login.php';
+        const body = isSignup ? { username, password, email } : { username, password };
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body),
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            setMessage(data.message);
+
+            // Display alert box with the message
+            alert(data.message);
+        } catch (error) {
+            console.error('Error:', error);
+            setMessage('An error occurred. Please try again.');
+            alert('An error occurred. Please try again.');
+        }
     };
 
     return (
         <div className="auth-container">
             <h2>{isSignup ? 'Signup' : 'Login'}</h2>
             <form onSubmit={handleSubmit} className="auth-form">
-                {isSignup && (
-                    <input
-                        type="text"
-                        placeholder="Username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
-                    />
-                )}
-                {!isSignup && (
-                    <input
-                        type="text"
-                        placeholder="Username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
-                    />
-                )}
+                <input
+                    type="text"
+                    placeholder="Username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                />
                 {isSignup && (
                     <input
                         type="email"
@@ -124,6 +127,5 @@ function Signup() {
     );
 }
 
-export default Signup;
-
+export default Signin;
 

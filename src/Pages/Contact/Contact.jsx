@@ -269,7 +269,7 @@ function Contact() {
         message: '',
       },
       onSubmit: async (values) => {
-        const response = await fetch('http://localhost/php/contact.php', { // Update the URL to your PHP script path
+        const response = await fetch('http://localhost/project/contact.php', { // Update the URL to your PHP script path
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(values),
